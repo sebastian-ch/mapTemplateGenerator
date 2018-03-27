@@ -57,7 +57,6 @@
 
         function drawMap(data) {
 
-            //add geojson and bind tooltip that shows all properties and their values
             var gjn = L.geoJson(data, {
                 style: {
                     color: 'red'
@@ -73,9 +72,6 @@
 
                 }
             }).addTo(map);
-
-
-            //console.log(voting);
 
             map.fitBounds(gjn.getBounds());
         }
