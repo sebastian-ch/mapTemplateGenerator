@@ -14,7 +14,7 @@
             font-family: Montserrat, sans-serif;
         }
 
-        .land {
+        .states {
             fill: #d3d3d3;
         }
 
@@ -22,10 +22,6 @@
             stroke: darkgray;
             stroke-width: 1.4;
             fill-opacity: 0;
-        }
-
-        .hover {
-            fill: yellow;
         }
 
         h1 {
@@ -38,17 +34,11 @@
             color: #005DAA;
         }
 
-        h2 {
-            top: 60px;
-            width: 80%;
-            margin: 10px auto 10px auto;
-            font-size: 1.2em;
-        }
-
         #map {
             width: 80%;
-            margin: 10px auto;
+            margin: 10px auto 10px auto;
             border: 1px solid #d3d3d3;
+            text-align: center;
         }
     </style>
 </head>
@@ -56,11 +46,10 @@
 <body>
 
     <h1>US Counties</h1>
-    
+
     <div id="map"></div>
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
 
     <script>
@@ -76,36 +65,44 @@
             width = parseInt(d3.select('#map').style('width')),
             width = width - margin.left - margin.right,
             mapRatio = .5,
-            height = width * mapRatio;
+            //height = width * mapRatio;
+            height = 600;
 
         var svg = d3.select("#map")
-
             .append("svg")
             .attr("width", width)
             .attr("height", height);
 
-        var projection = d3.geoAlbers()
-            .scale(width)
-            .translate([width / 2, height / 2]);
-
-        var geoPath = d3.geoPath()
-            .projection(projection);
-
-        queue()
-            .defer(d3.json, '/geojsons/us-counties-topo.json')
-            .defer(d3.json, '/geojsons/na_land_clipped.json')
-            .await(makeMap);
+        var files = ["/geojsons/states.geojson", "/geojsons/us-counties-topo.json"];
+        var promises = [];
 
 
-        function makeMap(error, counties, na) {
+        files.forEach(function (url) {
+            promises.push(d3.json(url))
+        });
+
+        Promise.all(promises).then(function (values) {
+            makeMap(values[0], values[1])
+        });
+
+
+        function makeMap(states, counties) {
+
+            console.log(states);
+
+            var projection = d3.geoAlbersUsa()
+                .fitSize([width - 50, height - 50], states);
+
+            var geoPath = d3.geoPath()
+                .projection(projection);
 
             svg.append("g")
                 .selectAll("path")
-                .data(na.features)
+                .data(states.features)
                 .enter()
                 .append("path")
                 .attr("d", geoPath)
-                .attr("class", "land");
+                .attr("class", "states");
 
             svg.append('g')
                 .selectAll('path')
@@ -125,8 +122,9 @@
 
             // update projection
             projection
-                .translate([width / 2, height / 2])
-                .scale(width);
+                //.translate([width / 2, height / 2])
+                //.scale(width);
+                .fitSize([width - 50, height - 50], states);
 
             // resize the map container
             svg
@@ -134,7 +132,7 @@
                 .style('height', height + 'px');
 
             // resize the data
-            svg.selectAll('.land').attr('d', geoPath);
+            svg.selectAll('.states').attr('d', geoPath);
             svg.selectAll('.county').attr('d', geoPath);
         }
     </script>
