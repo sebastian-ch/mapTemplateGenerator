@@ -42,7 +42,6 @@ inquirer.prompt(QUESTIONS)
     });
 
 
-
 function createDirectoryContents(templatePath, newProjectPath) {
     const filesToCreate = fs.readdirSync(templatePath);
 
