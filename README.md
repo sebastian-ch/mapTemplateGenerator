@@ -1,11 +1,7 @@
 # mapTemplateGenerator
 
-but for real this time..
-
-
-creates a template for d3, mapbox-gl, or leaflet
+Personal node module to create project templates - lets me select d3, mapbox-gl, or leaflet.
 
 yay organization!
 
-
-type `generate` then follow the steps to create a project folder. 
+type `generate` then follow the prompts
