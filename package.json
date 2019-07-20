@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^5.2.0"
+    "inquirer": "latest"
   },
   "bin": {
     "generate": "index.js"
