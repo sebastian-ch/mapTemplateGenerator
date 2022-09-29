@@ -7,7 +7,7 @@
     "@turf/turf": "^5.1.6",
     "chalk": "^2.3.0",
     "csv2geojson": "^5.0.2",
-    "d3": "^4.12.2",
+    "d3": "^7.6.1",
     "geojson-validation": "^0.2.0",
     "mapshaper": "^0.4.59",
     "opn": "^5.1.0",
